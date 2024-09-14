@@ -2,6 +2,8 @@ package com.projects.pomodoro.service;
 
 import com.projects.pomodoro.model.Todo;
 import com.projects.pomodoro.repository.TodoRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +21,14 @@ public class TodoServiceImpl implements TodoService{
     return todoRepository.save(todo);
   }
 
+
   @Override
+  @Transactional
   public void deleteTodoById(Long id) {
-    todoRepository.deleteById(id);
+    if (!todoRepository.existsById(id)) {
+      throw new EntityNotFoundException("Todo not found with id " + id);
+    }
+    todoRepository.deleteById(id); // This will trigger cascading deletes for related PomodoroSession entities
   }
 
   @Override

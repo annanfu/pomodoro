@@ -1,9 +1,8 @@
 package com.projects.pomodoro.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Todo {
@@ -11,8 +10,10 @@ public class Todo {
   @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
   private Long id;
   private String title;
-  private int accumulatedTime = 0;
+  private int accumulatedTime;
 
+  @OneToMany(mappedBy = "todo", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<PomodoroSession> pomodoroSessions;
   public Todo() {
 
   }

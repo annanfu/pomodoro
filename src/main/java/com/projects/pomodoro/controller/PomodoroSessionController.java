@@ -13,8 +13,8 @@ public class PomodoroSessionController {
   private PomodoroService pomodoroService;
 
   @PostMapping("/{todoId}/start")
-  public PomodoroSession startSession(@PathVariable Long todoId) {
-    return pomodoroService.startSession(todoId);
+  public PomodoroSession startSession(@PathVariable Long todoId, @RequestParam boolean isBreak) {
+    return pomodoroService.startSession(todoId, isBreak);
   }
 
   @PostMapping("/{sessionId}/end")

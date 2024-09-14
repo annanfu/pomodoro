@@ -34,7 +34,7 @@ public class PomodoroService {
     session.setStartTime(LocalDateTime.now());
     session.setEndTime(null);
     session.setDuration(isBreak ? 5 * 60 : 25 * 60); // 5 min for break, 25 min for work
-    session.setRemainingTime(isBreak ? 5 * 60 : 25 * 60);
+    session.setRemainingTime(session.getDuration());
     session.setIsBreak(isBreak);
     return sessionRepository.save(session);
   }
@@ -45,13 +45,12 @@ public class PomodoroService {
         .orElseThrow(() -> new EntityNotFoundException("Session not found"));
 
     session.setEndTime(LocalDateTime.now());
-    session.setRemainingTime(0); // Mark remaining time as 0 when ending the session
+    session.setRemainingTime(0);
 
-    // Only accumulate time if it's a work session, not a break
     if (!session.getIsBreak()) {
       Todo todo = session.getTodo();
       long elapsedSeconds = ChronoUnit.SECONDS.between(session.getStartTime(), session.getEndTime());
-      todo.setAccumulatedTime((int) (todo.getAccumulatedTime() + elapsedSeconds));
+      todo.setAccumulatedTime(todo.getAccumulatedTime() + (int) elapsedSeconds);
       todoRepository.save(todo);
     }
 
