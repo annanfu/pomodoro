@@ -10,7 +10,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/todo")
 // Allow requests from any origin to access the resource
-@CrossOrigin
+@CrossOrigin(origins = "*")
+
 
 public class TodoController {
   @Autowired
